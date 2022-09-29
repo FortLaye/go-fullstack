@@ -1,0 +1,25 @@
+
+mongoose.connect('mongodb+srv://Doulaye12:limitaccess12@cluster0.n8dlfgh.mongodb.net/?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
+
+app.post('/api/stuff', (req, res, next)=>{
+	delete req.body._id;
+	const thing = new Thing({
+		...req.body
+	});
+
+	thing.save()
+		.then(() => res.status(201).json({message: 'Objet créer avec succès !'}))
+		.catch(() => res.status(400).json({ error }))
+})
+
+app.use(bodyParser.json());
+
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const Thing = require('./models/Thing');
+
+app.use(express.json());
